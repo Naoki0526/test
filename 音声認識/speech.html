@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>音声認識のデモ</title>
+</head>
+<body>
+  <h1>音声認識デモ</h1>
+  <p id="result-text">認識結果がここに表示されます。</p>
+  <button id="start-btn">音声認識を開始</button>
+  <button id="stop-btn">音声認識を停止</button>
+
+  <script>
+    const resultText = document.getElementById('result-text');
+    const startBtn = document.getElementById('start-btn');
+    const stopBtn = document.getElementById('stop-btn');
+    let recognition;
+
+    // 音声認識を開始する関数
+    function startRecognition() {
+      recognition = new webkitSpeechRecognition();
+      recognition.lang = 'ja-JP'; // 言語を日本語に設定
+
+      recognition.onresult = function(event) {
+        const result = event.results[0][0].transcript;
+        resultText.textContent = '認識結果: ' + result;
+      }
+
+      recognition.onerror = function(event) {
+        resultText.textContent = 'エラーが発生しました。';
+      }
+
+      recognition.start();
+      resultText.textContent = '話しかけてください...';
+    }
+
+    // 音声認識を停止する関数
+    function stopRecognition() {
+      if (recognition) {
+        recognition.stop();
+        resultText.textContent = '音声認識を停止しました。';
+      }
+    }
+
+    startBtn.addEventListener('click', startRecognition);
+    stopBtn.addEventListener('click', stopRecognition);
+  </script>
+</body>
+</html>
